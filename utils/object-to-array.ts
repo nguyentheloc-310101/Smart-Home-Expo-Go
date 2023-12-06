@@ -1,4 +1,4 @@
-export const convertObjectToArray = (obj) => {
+export const convertObjectToArray = (obj: any) => {
   const array = [];
 
   for (let i = 0; obj[i] !== undefined; i++) {
