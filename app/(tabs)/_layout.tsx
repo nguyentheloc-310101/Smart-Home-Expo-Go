@@ -27,21 +27,20 @@ const slides = [
     id: 1,
     title: 'Smart Home App',
     description:
-      '“Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat"',
-    image: require('../../assets/image-slider/onboardScreen1.png'),
+      'Smart homes utilize IoT for efficient automation, enhancing security, energy management, and user comfort through interconnected devices and intelligent systems.',
+    image: require('../../assets/image-slider/SmartHome1.png'),
   },
   {
     id: 2,
     title: 'Control devices in House',
     description:
-      '“Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat"',
-    image: require('../../assets/image-slider/onboardScreen2.png'),
+      'Fully control devices and observing electrical characteristics of all appliances in house.',
+    image: require('../../assets/image-slider/ControlDevice.png'),
   },
   {
     id: 3,
     title: 'Measure electrical characteristics',
-    description:
-      '“Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat"',
+    description: 'Measure and notification the predicable status of devices',
     image: require('../../assets/image-slider/onboardScreen3.png'),
   },
 ];

@@ -1,15 +1,14 @@
 import axios from 'axios';
 import { Image } from 'expo-image';
+import * as Network from 'expo-network';
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { io } from 'socket.io-client';
 import BoxDevice from '../../components/box-device/BoxDevice';
 import { SPACING } from '../../constants/spacing';
 import { COLORS } from '../../utils/theme';
-import * as Network from 'expo-network';
-import useNetwork from '../../stores/ip-address';
-const socket = io(`http://192.168.2.23:5000`);
-const API = axios.create({ baseURL: `http://192.168.2.23:5000` });
+const socket = io(`http://172.20.10.7:5000`);
+const API = axios.create({ baseURL: `http://172.20.10.7:5000` });
 API.interceptors.request.use((req) => {
   req.headers['Content-Type'] = 'application/json';
   return req;
