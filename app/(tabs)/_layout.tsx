@@ -1,10 +1,9 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs } from 'expo-router';
-import { Pressable, useColorScheme } from 'react-native';
-import { Image, Text, View } from 'react-native';
+import { Tabs } from 'expo-router';
+import { useState } from 'react';
+import { Image, Text, View, useColorScheme } from 'react-native';
 import AppIntroSlider from 'react-native-app-intro-slider';
 import Colors from '../../constants/Colors';
-import { useState } from 'react';
 import { COLORS, SIZES } from '../../utils/theme';
 
 /**
@@ -119,7 +118,7 @@ export default function TabLayout() {
               ),
             }}
           />
-          <Tabs.Screen
+          {/* <Tabs.Screen
             name="two"
             options={{
               title: 'Tab Two',
@@ -130,7 +129,7 @@ export default function TabLayout() {
                 />
               ),
             }}
-          />
+          /> */}
         </Tabs>
       )}
     </>

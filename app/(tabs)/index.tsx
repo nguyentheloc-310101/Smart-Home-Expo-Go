@@ -2,19 +2,29 @@ import axios from 'axios';
 import { Image } from 'expo-image';
 import * as Network from 'expo-network';
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { io } from 'socket.io-client';
 import BoxDevice from '../../components/box-device/BoxDevice';
 import { SPACING } from '../../constants/spacing';
 import { COLORS } from '../../utils/theme';
-const socket = io(`http://172.20.10.7:5000`);
-const API = axios.create({ baseURL: `http://172.20.10.7:5000` });
+import SensorInfo from '../../components/sensor-device/SensorInfo';
+
+const imageTemp = require('../../assets/images/temperature.png');
+const imageHumid = require('../../assets/images/humidity.png');
+
+const socket = io(`http://192.168.1.4:5000`);
+const API = axios.create({ baseURL: `http://192.168.1.4:5000` });
+
 API.interceptors.request.use((req) => {
   req.headers['Content-Type'] = 'application/json';
   return req;
 });
 export default function TabOneScreen() {
   const [realtimeLed, setRealtimeLed] = useState<any>();
+  const [realtimeHumid, setRealtimeHumid] = useState<any>();
+
+  const [realtimeTemperature, setRealtimeTemperature] = useState<any>();
+  const [handleToggleDevice, setHandleToggleDevice] = useState<any>();
   const [realtimeFan, setRealtimeFan] = useState<any>();
 
   const [activeCategory, setActiveCategory] = useState<number>(0);
@@ -25,13 +35,53 @@ export default function TabOneScreen() {
       setRealtimeLed(led);
       console.log(`ledUpdate: ${led}`);
     });
+    socket.on('humidityUpdate', ({ humidity }) => {
+      setRealtimeHumid(humidity);
+      console.log(`humidityUpdate: ${humidity}`);
+    });
+    socket.on('temperatureUpdate', ({ temperature }) => {
+      setRealtimeTemperature(temperature);
+      console.log(`temperatureUpdate: ${temperature}`);
+    });
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const responseTemperature = await API.get('/api/data/dataTemp');
+
+      if (responseTemperature) {
+        const result = convertObjectToArray(responseTemperature.data);
+        setRealtimeTemperature(result[0].value);
+        console.log('Temper', result[0].value);
+      }
+
+      return;
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const responseHumid = await API.get('/api/data/dataHumidity');
+
+      if (responseHumid) {
+        const result = convertObjectToArray(responseHumid.data);
+        setRealtimeHumid(result[0].value);
+        console.log('humid', result[0].value);
+      }
+
+      return;
+    };
+    fetchData();
   }, []);
 
   useEffect(() => {
     const fetchData = async () => {
       const response = await API.get('/api/data/dataLed');
+
       if (response) {
         const result = convertObjectToArray(response.data);
+        // console.log('result', result);
         setRealtimeLed(result[0].value);
       }
       return;
@@ -42,7 +92,7 @@ export default function TabOneScreen() {
   const handleToggleLedLed = async () => {
     const ipLocal = await Network.getIpAddressAsync();
 
-    console.log(ipLocal);
+    // console.log(ipLocal);
     // fetch('https://jsonip.com/')
     //   .then((res) => res.text())
     //   .then((ip) => console.log(ip));
@@ -88,7 +138,7 @@ export default function TabOneScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View
         style={{
           flexDirection: 'row',
@@ -112,6 +162,7 @@ export default function TabOneScreen() {
           source={require('../../assets/home/Avatar.png')}
         />
       </View>
+
       <View
         style={{
           display: 'flex',
@@ -124,7 +175,7 @@ export default function TabOneScreen() {
         }}>
         <BoxDevice
           toggledEvent={handleToggleLedLed}
-          deviceName={'LED'}
+          deviceName={'LIGHT'}
           valueState={realtimeLed}
           deviceImage={
             'https://images.unsplash.com/photo-1552862750-746b8f6f7f25?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
@@ -138,17 +189,33 @@ export default function TabOneScreen() {
           }
         />
         <BoxDevice
-          toggledEvent={undefined}
-          deviceName={'Unknown'}
-          deviceImage={''}
+          toggledEvent={setHandleToggleDevice}
+          deviceName={'Device'}
+          deviceImage={
+            'https://i.pinimg.com/564x/91/1a/e2/911ae201e8ed80400c49d5f3d3ade63c.jpg'
+          }
         />
         <BoxDevice
-          toggledEvent={undefined}
-          deviceName={'Unknown'}
-          deviceImage={''}
+          toggledEvent={setHandleToggleDevice}
+          deviceName={'Device'}
+          deviceImage={
+            'https://i.pinimg.com/564x/91/1a/e2/911ae201e8ed80400c49d5f3d3ade63c.jpg'
+          }
         />
       </View>
-    </View>
+      <View style={styles.sensorContainer}>
+        <SensorInfo
+          image={imageTemp}
+          value={realtimeTemperature}
+          type={'Temperature'}
+        />
+        <SensorInfo
+          value={realtimeHumid}
+          image={imageHumid}
+          type={'Humidity'}
+        />
+      </View>
+    </ScrollView>
   );
 }
 const styles = StyleSheet.create({
@@ -157,5 +224,14 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     backgroundColor: '#0553',
+  },
+  sensorContainer: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'row',
+    // alignItems: 'center',
+    gap: 10,
+    marginTop: 10,
+    padding: 10,
   },
 });

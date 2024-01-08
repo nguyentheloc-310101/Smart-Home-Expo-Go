@@ -51,16 +51,16 @@ const BoxDevice = ({
         </View>
         <View style={styles.informDevice}>
           <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Current:</Text>
-          <Text>120V</Text>
+          <Text> V</Text>
         </View>
         <View style={styles.informDevice}>
           <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Power:</Text>
-          <Text>200 kW/h</Text>
+          <Text> kW/h</Text>
         </View>
-        <View style={styles.informDevice}>
+        {/* <View style={styles.informDevice}>
           <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Value:</Text>
           <Text>{valueState}</Text>
-        </View>
+        </View> */}
       </View>
       <View
         style={{
